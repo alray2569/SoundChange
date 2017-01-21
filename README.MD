@@ -33,7 +33,8 @@ The word list should contain exactly one word per line.
 All words will be converted to lower case to be run through
 the system. The author recommends using the file extension
 `.ygw` (Yasgheld words) for this file, and for the output
-file.
+file. If you use this extension, you will not need to
+enter it in the command line argument.
 
 Syntax of the sound change list
 ----
@@ -52,7 +53,8 @@ around sound changes are optional; i.e. `a>o/!_#` is identical
 to `a > o / !_#`.
 
 The author recommends using the file extension `.ygc` (Yasgheld
-changes) for this file.
+changes) for this file. If you use this extension, you will not
+need to enter it in the command line argument.
 
 Syntax of the sound group list
 ----
@@ -65,4 +67,5 @@ the group, and "abcd" are the letters that comprise the group.
 Note that this syntax is likely to change in future versions
 of Yasgheld. The author recommends using the extension `.ygg1`
 (Yasgheld groups version 1) for these files, to distinguish 
-them from files using a later syntax.
+them from files using a later syntax. If you use this extension,
+you will not need to enter it into the command line argument.

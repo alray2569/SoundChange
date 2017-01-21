@@ -11,24 +11,29 @@ main :: IO ()
 main = do
   args <- getArgs
 
-  soundchangefile <- openFile ((args !! 1) ++ ".hsc") ReadMode
+  soundchangefile <- openFile (fileExt (args !! 1) ".ygc") ReadMode
   scfcontent <- hGetContents soundchangefile
   let soundchanges = map read (lines scfcontent)
 
-  wordlistinfile <- openFile (head args ++ ".hin") ReadMode
+  wordlistinfile <- openFile (fileExt (head args) ".ygw") ReadMode
   wlifcontent <- hGetContents wordlistinfile
   let wordlistin = lines wlifcontent
 
-  soundgroupfile <- openFile ((args !! 2) ++ ".hsg") ReadMode
+  soundgroupfile <- openFile (fileExt (args !! 2) ".ygg1") ReadMode
   sgfcontent <- hGetContents soundgroupfile
   let soundgroups = fromList $ map read (lines sgfcontent)
 
   let wordlistout = applyAllToAll soundchanges soundgroups wordlistin
-  writeFile ((args !! 3) ++ ".hout") (unlines wordlistout)
+  writeFile (fileExt (args !! 3) ".ygw") (unlines wordlistout)
   hClose soundchangefile
   hClose wordlistinfile
   hClose soundgroupfile
 
+fileExt :: String -> String -> String
+fileExt fn ext =
+  if '.' `elem` fn
+    then fn
+    else fn ++ ext
 
 applyAllToAll :: [SoundChange] -> Map Char SoundGroup -> [String] -> [String]
 applyAllToAll scs sgs =
