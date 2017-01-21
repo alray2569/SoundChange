@@ -62,7 +62,7 @@ applySoundChange sc sgs string =
     apply _ "" = ""
     apply pos str
       | initial sc == take (length $ initial sc) str =
-        if applicable (when sc) sgs str pos
+        if applicable (when sc) sgs modstr pos
           --then final sc ++ drop (length $ initial sc) str
           then final sc ++ apply (pos + len) (drop len str)
           else recurse

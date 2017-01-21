@@ -11,25 +11,25 @@ main :: IO ()
 main = do
   args <- getArgs
 
-  soundchangefile <- openFile (args !! 1) ReadMode
+  soundchangefile <- openFile ((args !! 1) ++ ".hsc") ReadMode
   scfcontent <- hGetContents soundchangefile
   let soundchanges = map read (lines scfcontent)
-  hClose soundchangefile
 
-  wordlistinfile <- openFile (head args) ReadMode
+  wordlistinfile <- openFile (head args ++ ".hin") ReadMode
   wlifcontent <- hGetContents wordlistinfile
   let wordlistin = lines wlifcontent
-  hClose wordlistinfile
 
-  soundgroupfile <- openFile (args !! 2) ReadMode
+  soundgroupfile <- openFile ((args !! 2) ++ ".hsg") ReadMode
   sgfcontent <- hGetContents soundgroupfile
   let soundgroups = fromList $ map read (lines sgfcontent)
-  hClose soundgroupfile
 
   let wordlistout = applyAllToAll soundchanges soundgroups wordlistin
-  writeFile (args !! 3) (unlines wordlistout)
+  writeFile ((args !! 3) ++ ".hout") (unlines wordlistout)
+  hClose soundchangefile
+  hClose wordlistinfile
+  hClose soundgroupfile
 
 
 applyAllToAll :: [SoundChange] -> Map Char SoundGroup -> [String] -> [String]
 applyAllToAll scs sgs =
-  map $ foldl (.) id $ map (`applySoundChange` sgs) scs
+  map $ foldr ((.).(`applySoundChange` sgs)) id scs
