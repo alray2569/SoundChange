@@ -3,7 +3,6 @@ module SoundChange (
   applySoundChange
 ) where
 
-import Data.List (isInfixOf)
 import Data.List.Split
 import Data.Char (toLower)
 import Data.Map (Map)
@@ -38,12 +37,12 @@ instance Read SoundChange where
 
     where
       hasCond = elem '/'  :: String   -> Bool
-      getInitial = (!!1)  :: [String] -> String
-      getFinal = (!!2)    :: [String] -> String
-      getCond = (!!3)     :: [String] -> String
+      getInitial = (!!0)  :: [String] -> String
+      getFinal = (!!1)    :: [String] -> String
+      getCond = (!!2)     :: [String] -> String
 
       splitstr :: [String]
-      splitstr = splitOneOf ">/" str
+      splitstr = splitOneOf "/>" str
 
 {- |
   Applies the given SoundChange to the given String
@@ -54,14 +53,20 @@ applySoundChange ::
   -> String -- ^ String to apply sound change rule to
   -> String
 
-applySoundChange sc sgs =
-  tail.init $ apply 0 sc modstr
+applySoundChange sc sgs string =
+  tail.init $ apply 0 modstr
   where
-    modstr :: String
-    modstr = "#" ++ map toLower str ++ "#"
+    modstr = "#" ++ map toLower string ++ "#" :: String
 
     apply :: Int -> String -> String
     apply _ "" = ""
-    apply pos str =
-      if initial sc == take len str
-        then applicable (when sc)
+    apply pos str
+      | initial sc == take (length $ initial sc) str =
+        if applicable (when sc) sgs str pos
+          --then final sc ++ drop (length $ initial sc) str
+          then final sc ++ apply (pos + len) (drop len str)
+          else recurse
+      | otherwise = recurse
+        where
+          len = length $ initial sc :: Int
+          recurse = head str : apply (pos + 1) (tail str) :: String
