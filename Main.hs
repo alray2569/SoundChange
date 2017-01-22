@@ -5,10 +5,11 @@ module Main (main) where
 
 import System.Environment (getArgs)
 import System.IO
-import Data.List (isSubsequenceOf, isPrefixOf)
+import Data.List (isSubsequenceOf)
 
 import SoundChange
 import SoundGroup
+import Util (replace, removeComment)
 
 {- |
   IO Handler for the game
@@ -21,17 +22,17 @@ main = do
   sgfcontent <- hGetContents soundgroupfile
   let soundgroups = if ".ygg1" `isSubsequenceOf` (args !! 2)
       then
-        map ((\(a,b) -> (a,b, Nothing)).read) (lines sgfcontent)
+        map ((\(a,b) -> (a,b, Nothing)).read.removeComment) (lines sgfcontent)
       else
         zipWith parseSoundGroup [1..] (lines sgfcontent)
 
   soundchangefile <- openFile (fileExt (args !! 1) ".ygc") ReadMode
   scfcontent <- hGetContents soundchangefile
-  let soundchanges = map read (lines $ subGroups soundgroups scfcontent)
+  let soundchanges = map (read.removeComment) (lines $ subGroups soundgroups scfcontent)
 
   wordlistinfile <- openFile (fileExt (head args) ".ygw") ReadMode
   wlifcontent <- hGetContents wordlistinfile
-  let wordlistin = lines wlifcontent
+  let wordlistin = map removeComment $ lines wlifcontent
 
   let wordlistout = applyAllToAll soundchanges soundgroups wordlistin
   writeFile (fileExt (args !! 3) ".ygw") (unlines wordlistout)
@@ -39,29 +40,36 @@ main = do
   hClose wordlistinfile
   hClose soundgroupfile
 
-fileExt :: String -> String -> String
+-- | Append the given extension to the given filename if no
+--   other extension is already present
+fileExt :: String -- ^ The filename to append the extension to
+        -> String -- ^ The extension to append
+        -> String -- ^ The filename with extension
 fileExt fn ext =
   if '.' `elem` fn
     then fn
     else fn ++ ext
 
-applyAllToAll :: [SoundChange] -> [SoundGroup] -> [String] -> [String]
+-- | applies all given <SoundChange>s to all given Strings.
+applyAllToAll :: [SoundChange] -- ^ <SoundChange>s to apply
+              -> [SoundGroup] -- ^ <SoundGroup>s to use during application
+              -> [String] -- ^ Strings to apply SoundChanges to
+              -> [String] -- ^ String after application
 applyAllToAll scs sgs =
   map $ foldr ((.).(`applySoundChange` sgs)) id scs
 
-subGroups :: [SoundGroup] -> String -> String
+-- | Substitutes long names for short names in the given string
+--   for all given SoundGroups, if they have long names
+subGroups :: [SoundGroup] -- ^ <SoundGroup>s to use
+          -> String -- ^ String to replace in
+          -> String -- ^ String after replacement
 subGroups = foldr ((.).replaceGroup) id
 
-replaceGroup :: SoundGroup -> String -> String
+-- | Substitutes long name for short name in the given string
+--   for the given SoundGroup, if it has a long name
+replaceGroup :: SoundGroup -- ^ The <SoundGroup> to use
+            -> String -- ^ String to replace in
+            -> String -- ^ String after replacement
 replaceGroup (_, _, Nothing) str = str
 replaceGroup (short, _, Just long) str =
   replace ("[" ++ long ++ "]") [short] str
-
-replace :: Eq a => [a] -> [a] -> [a] -> [a]
-replace [] _ str = str
-replace _ _ [] = []
-replace find repl str
-  | find `isPrefixOf` str =
-    repl ++ replace find repl (drop (length find) str)
-  | otherwise =
-    head str : replace find repl (tail str)

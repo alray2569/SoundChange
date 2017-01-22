@@ -25,7 +25,7 @@ import Data.Char (toLower)
 
 import Condition
 import SoundGroup
-import Util (strip, matches)
+import Util (strip, replace)
 
 {- |
   The representation of a sound change.
@@ -34,34 +34,19 @@ data SoundChange = SoundChange {
   initial :: String, -- ^ Returns the initial value, before the sound change
   final :: String, -- ^ Returns the final value, after the sound change
   when :: Condition -- ^ Returns the condition under which the rule applies
-} deriving (Show)
+}
 
 instance Read SoundChange where
   readsPrec _ str
     | hasCond str =
-      [(SoundChange {
-        initial = getInitial splitstr,
-        final = if getFinal splitstr /= "{}"
-          then getFinal splitstr
-          else "",
-        when = read $ getCond splitstr
-      }, "")]
-
-    | otherwise   =
-      [(SoundChange {
-        initial = getInitial splitstr,
-        final = getFinal splitstr,
-        when = Always
-      }, "")]
-
+      let [ini, fin, cond] = splitstr
+      in [(SoundChange ini (if fin /= "{}" then fin else "") (read cond), "")]
+    | otherwise =
+      let [ini, fin] = splitstr
+      in [(SoundChange ini fin Always, "")]
     where
-      hasCond = elem '/'  :: String   -> Bool
-      getInitial = (!!0)  :: [String] -> String
-      getFinal = (!!1)    :: [String] -> String
-      getCond = (!!2)     :: [String] -> String
-
-      splitstr :: [String]
-      splitstr = map strip $ splitOneOf "/>" str
+      splitstr = map strip $ splitOneOf "/>" str :: [String]
+      hasCond = elem '/'  :: String -> Bool
 
 {- |
   Applies the given SoundChange to the given String
@@ -81,7 +66,7 @@ applySoundChange (SoundChange input output cond) sgs string =
     apply _ "" = ""
     apply pos str
       | and (zipWith (matches sgs) input (take len str)) &&
-        applicable cond sgs modstr pos =
+        applicable cond sgs (replace input "_" modstr) pos =
           output ++ apply (pos + len) (drop len str)
       | otherwise = recurse
         where

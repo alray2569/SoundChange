@@ -3,14 +3,16 @@
 -}
 module Util (
   strip,
-  matches
+  replace,
+  removeComment,
+  (??),
+  (?)
 ) where
 
 import Data.Char (isSpace)
-import Data.List (dropWhileEnd)
+import Data.List (dropWhileEnd, isPrefixOf, isSubsequenceOf)
+import Data.List.Split (splitOn)
 import Data.Maybe (isNothing)
-
-type SoundGroup = (Char, String, Maybe String)
 
 {- |
   Strips leading and trailing whitespace from the given String.
@@ -19,40 +21,44 @@ strip :: String -- ^ Input String
       -> String -- ^ Output String, whitespace removed
 strip = dropWhileEnd isSpace.dropWhile isSpace -- remove spaces around
 
-{- |
-  Determines if the given characters match after group resolution.
--}
-matches :: [SoundGroup] -- ^ The SoundGroups to check in
-        -> Char -- ^ The Character to check against
-        -> Char -- ^ The Character to check
-        -> Bool -- ^ True iff the characters match.
-matches _ '_' _ = True
-matches _ '*' _  = True
-matches sgs pchar achar =
-  maybe (achar == pchar) (elem achar) (sgs ?? pchar)
+-- | Performs substitution on a string
+replace :: Eq a
+  => [a] -- ^ The search value
+  -> [a] -- ^ The replace value
+  -> [a] -- ^ The string to search in
+  -> [a] -- ^ The string, after substitutions
+replace [] _ str = str
+replace _ _ [] = []
+replace find repl str
+  | find `isPrefixOf` str =
+    repl ++ replace find repl (drop (length find) str)
+  | otherwise =
+    head str : replace find repl (tail str)
 
-infixl 9 ??
-(??) :: (Eq a) => [(a, b, c)] -> a -> Maybe b
-(??) list find
-  | isNothing (list ? find) = Nothing
-  | otherwise = Just $ (\(Just (b, _)) -> b) (list ? find)
+-- | Removes comments from strings
+removeComment :: String -- ^ String to remove comments from
+              -> String -- ^ String with comments removed
+removeComment str
+  | ";" `isSubsequenceOf` str = head $ splitOn ";" str
+  | otherwise      = str
 
+-- | Finds the list referenced by the given first term
 infixl 9 ?
-(?) :: (Eq a) => [(a, b, c)] -> a -> Maybe (b, c)
+(?) :: (Eq a)
+    => [(a, b, c)] -- ^ The list of three-tuples to search in
+    -> a -- ^ The first term to search for
+    -> Maybe (b, c) -- ^ Just the last two terms, or Nothing if no matches
 (?) [] _ = Nothing
 (?) ((a, b, c):rest) find
   | a == find = Just (b, c)
   | otherwise = rest ? find
 
-infixl 9 >>??
-(>>??) :: (Eq c) => [(a, b, c)] -> c -> Maybe a
-(>>??) list find
-  | isNothing (list >>? find) = Nothing
-  | otherwise = Just $ (\(Just (a, _)) -> a) (list >>? find)
-
-infixl 9 >>?
-(>>?) :: (Eq c) => [(a, b, c)] -> c -> Maybe (a, b)
-(>>?) [] _ = Nothing
-(>>?) ((a, b, c):rest) find
-  | c == find = Just (a, b)
-  | otherwise = rest >>? find
+-- | Finds the second term referenced by the first given term
+infixl 9 ??
+(??) :: (Eq a)
+      => [(a, b, c)] -- ^ The list of three-tuples to search in
+      -> a -- ^ The first term to search for
+      -> Maybe b -- ^ Just the second term, or Nothing if no matches
+(??) list find
+  | isNothing (list ? find) = Nothing
+  | otherwise = Just $ (\(Just (b, _)) -> b) (list ? find)

@@ -25,7 +25,7 @@ import Data.List.Split
 import Control.Monad (join)
 
 import SoundGroup
-import Util (strip, matches)
+import Util (strip)
 
 {- |
   A situation, written out as specified in README:
