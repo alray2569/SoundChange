@@ -50,10 +50,15 @@ in front of them, and the beginning and end of the word are
 represented by the hash symbol ('`#`'). For example, `a > o / !_#`
 changes all instances of 'a' to 'o' except word-finally. Spaces
 around sound changes are optional; i.e. `a>o/!_#` is identical
-to `a > o / !_#`. Capital letters represent groups of sounds defined
+to `a > o / !_#`. 
+
+Capital letters represent groups of sounds defined
 in the sound group list, while lowercase letters represent 
 individual sounds. The '`*`' character represents a special group
-of all sounds and matches all characters.
+of all sounds and matches all characters. When referencing a group
+with a long name, the long name should be placed in square brackets
+(`[]`). Groups can be used in inputs and situations only currently,
+not in the output argument.
 
 The author recommends using the file extension `.ygc` (Yasgheld
 changes) for this file. If you use this extension, you will not
@@ -61,14 +66,15 @@ need to enter it in the command line argument.
 
 Syntax of the sound group list
 ----
-Sound groups should be listed exactly one per line, and take 
-the following form:
+Sound groups should be listed exactly one per line, and take one of
+the following forms:
 ``X: abcd``
+``Group: abcd``
 
-where 'X' is the one-character capital letter that identifies
+where `X` is the one-character capital letter that identifies
+the group or `Group` is a multicharacter name that identifies
 the group, and "abcd" are the letters that comprise the group.
-Note that this syntax is likely to change in future versions
-of Yasgheld. The author recommends using the extension `.ygg`
+The author recommends using the extension `.ygg`
 (Yasgheld groups) for these files. If you use this extension,
 you will not need to enter it into the command line argument.
 If you have files using the version 1 syntax, they will still
