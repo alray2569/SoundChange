@@ -1,12 +1,19 @@
-module Main where
+{- |
+  Main module for Yasgheld.
+-}
+module Main (main) where
 
 import System.Environment (getArgs)
 import System.IO
 import Data.Map (fromList, Map)
+import Data.List (isSubsequenceOf)
 
 import SoundChange
 import SoundGroup
 
+{- |
+  IO Handler for the game
+-}
 main :: IO ()
 main = do
   args <- getArgs
@@ -19,9 +26,13 @@ main = do
   wlifcontent <- hGetContents wordlistinfile
   let wordlistin = lines wlifcontent
 
-  soundgroupfile <- openFile (fileExt (args !! 2) ".ygg1") ReadMode
+  soundgroupfile <- openFile (fileExt (args !! 2) ".ygg") ReadMode
   sgfcontent <- hGetContents soundgroupfile
-  let soundgroups = fromList $ map read (lines sgfcontent)
+  let soundgroups = if ".ygg1" `isSubsequenceOf` (args !! 2)
+      then
+        fromList $ map read $ lines sgfcontent
+      else
+        fromList $ map parseSoundGroup $ lines sgfcontent
 
   let wordlistout = applyAllToAll soundchanges soundgroups wordlistin
   writeFile (fileExt (args !! 3) ".ygw") (unlines wordlistout)

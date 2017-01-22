@@ -1,35 +1,54 @@
+{- |
+  Module contains information relating to conditions and situations.
+
+  Read syntax:
+
+  @
+  [!]pre_post [& [!]pre_post [& [!]pre_post ...]]
+  @
+
+  where @pre@ is the precondition and @post@ is the postcondition
+
+  @!@ is used for negation,
+  @&@ is used to combine conditions,
+  @#@ is used for beginning or end of word,
+  @_@ is used for search pattern characters
+-}
 module Condition (
   Situation,
   Condition(Always, And, If, IfNot),
   applicable
 ) where
 
-import Data.Char (isSpace, isLower)
-import Data.List (dropWhileEnd, elemIndex)
+import Data.Char (isLower)
+import Data.List (elemIndex)
 import Data.List.Split
 import Data.Map (Map, (!))
 import Control.Monad (join)
 
 import SoundGroup
+import Util (strip)
 
 {- |
   A situation, written out as specified in README:
-  #: beginning or end of word
-  _: replacement characters
+
+  * #: beginning or end of word
+  * _: replacement characters
 -}
 type Situation = String
 
 {- |
   A condition is one of Always, a pairing of conditions,
   a situation, or a negated situation, as specified in README:
-  !: negates following condition
-  &: combines two conditions
+
+  * !: negates following condition
+  * &: combines two conditions
 -}
 data Condition =
-  Always |
-  Condition `And` Condition |
-  If Situation |
-  IfNot Situation
+  Always | -- ^ Always applicable
+  Condition `And` Condition | -- ^ Applicable if both are applicable
+  If Situation | -- ^ Applicable if true
+  IfNot Situation -- ^ Applicable if false
 
 instance Read Condition where
   readsPrec _ str
@@ -47,7 +66,6 @@ instance Read Condition where
       ispair = elem '&' -- check if contains pairing
       conds = map strip $ splitOn "&" str -- split on pairing
       isneg elt = head elt == '!' -- check if contains negation
-      strip = dropWhileEnd isSpace.dropWhile isSpace -- remove spaces around
 
 -- inverse of Read
 instance Show Condition where
@@ -65,7 +83,7 @@ applicable ::
   -> Map Char SoundGroup -- ^ Map of SoundGroups to use
   -> String -- ^ The example to check
   -> Int    -- ^ The position to check in the example
-  -> Bool
+  -> Bool   -- ^ True iff the Condition is applicable in this context
 
 applicable Always _ _ _ = True
 
@@ -85,7 +103,7 @@ applicable (If cond) sgs str pos =
     startIndex = maybe 0 (pos -) baseIndex
 
     isGroup :: Char -> Bool
-    isGroup = not.isLower
+    isGroup char = not (isLower char || char == '_' || char == '#')
 
     matches :: Char -> Char -> Bool
     matches '_' _ = True
