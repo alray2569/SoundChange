@@ -22,7 +22,6 @@ module SoundChange (
 
 import Data.List.Split
 import Data.Char (toLower)
-import Data.Map (Map)
 
 import Condition
 import SoundGroup
@@ -69,7 +68,7 @@ instance Read SoundChange where
 -}
 applySoundChange ::
   SoundChange -- ^ The sound change rule to apply
-  -> Map Char SoundGroup -- ^ Map of SoundGroups to use
+  -> [SoundGroup] -- ^ Map of SoundGroups to use
   -> String -- ^ String to apply sound change rule to
   -> String -- ^ String with sound change applied to it
 

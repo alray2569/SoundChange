@@ -22,7 +22,6 @@ module Condition (
 
 import Data.List (elemIndex)
 import Data.List.Split
-import Data.Map (Map)
 import Control.Monad (join)
 
 import SoundGroup
@@ -79,7 +78,7 @@ instance Show Condition where
 -}
 applicable ::
   Condition -- ^ The condition to check against
-  -> Map Char SoundGroup -- ^ Map of SoundGroups to use
+  -> [SoundGroup] -- ^ Map of SoundGroups to use
   -> String -- ^ The example to check
   -> Int    -- ^ The position to check in the example
   -> Bool   -- ^ True iff the Condition is applicable in this context
