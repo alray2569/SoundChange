@@ -50,7 +50,10 @@ in front of them, and the beginning and end of the word are
 represented by the hash symbol ('`#`'). For example, `a > o / !_#`
 changes all instances of 'a' to 'o' except word-finally. Spaces
 around sound changes are optional; i.e. `a>o/!_#` is identical
-to `a > o / !_#`.
+to `a > o / !_#`. Capital letters represent groups of sounds defined
+in the sound group list, while lowercase letters represent 
+individual sounds. The '`*`' character represents a special group
+of all sounds and matches all characters.
 
 The author recommends using the file extension `.ygc` (Yasgheld
 changes) for this file. If you use this extension, you will not
