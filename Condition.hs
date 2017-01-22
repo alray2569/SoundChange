@@ -20,14 +20,13 @@ module Condition (
   applicable
 ) where
 
-import Data.Char (isLower)
 import Data.List (elemIndex)
 import Data.List.Split
-import Data.Map (Map, (!))
+import Data.Map (Map)
 import Control.Monad (join)
 
 import SoundGroup
-import Util (strip)
+import Util (strip, matches)
 
 {- |
   A situation, written out as specified in README:
@@ -94,23 +93,9 @@ applicable (IfNot cond) sgs str pos =
   not $ applicable (If cond) sgs str pos
 
 applicable (If cond) sgs str pos =
-  and $ zipWith matches cond checkArea
-  where
-    baseIndex :: Maybe Int
-    baseIndex = elemIndex '_' cond
-
-    startIndex :: Int
-    startIndex = maybe 0 (pos -) baseIndex
-
-    isGroup :: Char -> Bool
-    isGroup char = not (isLower char || char == '_' || char == '#')
-
-    matches :: Char -> Char -> Bool
-    matches '_' _ = True
-    matches pchar achar =
-      if isGroup pchar
-        then achar `elem` (sgs ! pchar)
-        else pchar == achar
-
-    checkArea :: String
-    checkArea = take (length cond) (drop startIndex str)
+  let
+    baseIndex = elemIndex '_' cond :: Maybe Int
+    startIndex = maybe 0 (pos -) baseIndex :: Int
+    checkArea = take (length cond) (drop startIndex str) :: String
+  in
+    and $ zipWith (matches sgs) cond checkArea

@@ -26,7 +26,7 @@ import Data.Map (Map)
 
 import Condition
 import SoundGroup
-import Util (strip)
+import Util (strip, matches)
 
 {- |
   The representation of a sound change.
@@ -81,10 +81,9 @@ applySoundChange (SoundChange input output cond) sgs string =
     apply :: Int -> String -> String
     apply _ "" = ""
     apply pos str
-      | input == take len str =
-        if applicable cond sgs modstr pos
-          then output ++ apply (pos + len) (drop len str)
-          else recurse
+      | and (zipWith (matches sgs) input (take len str)) &&
+        applicable cond sgs modstr pos =
+          output ++ apply (pos + len) (drop len str)
       | otherwise = recurse
         where
           len = length input :: Int
