@@ -12,8 +12,19 @@ import Control.Monad (join)
 
 import SoundGroup
 
+{- |
+  A situation, written out as specified in README:
+  #: beginning or end of word
+  _: replacement characters
+-}
 type Situation = String
 
+{- |
+  A condition is one of Always, a pairing of conditions,
+  a situation, or a negated situation, as specified in README:
+  !: negates following condition
+  &: combines two conditions
+-}
 data Condition =
   Always |
   Condition `And` Condition |
@@ -22,22 +33,23 @@ data Condition =
 
 instance Read Condition where
   readsPrec _ str
-    | strip str == "Always" =
-      [(Always, "")]
-    | strip str == "_" =
-      [(Always, "")]
-    | ispair str =
-      [(And (read $ head conds) (read $ join $ tail conds), "")]
-    | isneg str =
-      [(IfNot $ tail str, "")]
-    | otherwise =
-      [(If str, "")]
+    -- Always parse "Always" as Always
+    | strip str == "Always" = [(Always, "")]
+    -- Always parse "_" as Always
+    | strip str == "_" = [(Always, "")]
+    -- Evaluate ands separately and combine
+    | ispair str = [(And (read $ head conds) (read $ join $ tail conds), "")]
+    -- Evaluate not, removing the '!', and spaces around
+    | isneg str = [(IfNot $ tail $ strip str, "")]
+    -- If is trivial, just add If to the string and remove spaces around
+    | otherwise = [(If $ strip str, "")]
     where
-      ispair = elem '&'
-      conds = map strip $ splitOn "&" str
-      isneg elt = head elt == '!'
-      strip = dropWhileEnd isSpace.dropWhile isSpace
+      ispair = elem '&' -- check if contains pairing
+      conds = map strip $ splitOn "&" str -- split on pairing
+      isneg elt = head elt == '!' -- check if contains negation
+      strip = dropWhileEnd isSpace.dropWhile isSpace -- remove spaces around
 
+-- inverse of Read
 instance Show Condition where
   show (cond1 `And` cond2) = show cond1 ++ " & " ++ show cond2
   show (If situation) = situation
