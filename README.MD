@@ -60,12 +60,18 @@ Syntax of the sound group list
 ----
 Sound groups should be listed exactly one per line, and take 
 the following form:
-`('X',"abcd")`
+``X: abcd``
 
 where 'X' is the one-character capital letter that identifies
 the group, and "abcd" are the letters that comprise the group.
 Note that this syntax is likely to change in future versions
-of Yasgheld. The author recommends using the extension `.ygg1`
-(Yasgheld groups version 1) for these files, to distinguish 
-them from files using a later syntax. If you use this extension,
+of Yasgheld. The author recommends using the extension `.ygg`
+(Yasgheld groups) for these files. If you use this extension,
 you will not need to enter it into the command line argument.
+If you have files using the version 1 syntax, they will still
+work if they have the extension `.ygg1`, however, the extension
+must be included in the command line.
+
+API
+---
+See the [documentation](https://alray2569.github.io/SoundChange/index.html).
