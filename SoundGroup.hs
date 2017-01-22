@@ -22,22 +22,18 @@ module SoundGroup (
 ) where
 
 import Data.List.Split (splitOn)
-import Data.Char (chr, ord)
+import Data.Char (chr)
 
 import Util (strip, (??))
 
-{- |
-  A SoundGroup is a group of sounds, to be identified by a
-  capital letter as a standin for any one of those sounds.
--}
+-- | A SoundGroup is a group of sounds, to be identified by a
+--  capital letter as a standin for any one of those sounds.
 type SoundGroup = (Char, String, Maybe String)
 
-{- |
-  Parses a string into a Map Char SoundGroup
--}
+-- | Parses a string into a Map Char SoundGroup
 parseSoundGroup :: Int -- ^ The number to assign to this SoundGroup
-  -> String -- ^ The string to parse
-  -> SoundGroup -- ^ The parsed SoundGroup Tuple
+                -> String -- ^ The string to parse
+                -> SoundGroup -- ^ The parsed SoundGroup Tuple
 parseSoundGroup num string
   | length first == 1 = (head first, strip $ split !! 1, Nothing)
   | otherwise = (chr $ num + 7935, strip $ split !! 1, Just first)
@@ -45,9 +41,7 @@ parseSoundGroup num string
     split = splitOn ":" string
     first = strip $ head split
 
-{- |
-  Determines if the given characters match after group resolution.
--}
+-- | Determines if the given characters match after group resolution.
 matches :: [SoundGroup] -- ^ The SoundGroups to check in
         -> Char -- ^ The Character to check against
         -> Char -- ^ The Character to check

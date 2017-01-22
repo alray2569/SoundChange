@@ -47,6 +47,7 @@ data Condition =
   Condition `And` Condition | -- ^ Applicable if both are applicable
   If Situation | -- ^ Applicable if true
   IfNot Situation -- ^ Applicable if false
+  deriving (Eq)
 
 instance Read Condition where
   readsPrec _ str
@@ -72,16 +73,13 @@ instance Show Condition where
   show (IfNot situation) = "!" ++ situation
   show Always = "Always"
 
-{-|
-  Determines if the condition applies to the given example
-  at the suggested location.
--}
-applicable ::
-  Condition -- ^ The condition to check against
-  -> [SoundGroup] -- ^ Map of SoundGroups to use
-  -> String -- ^ The example to check
-  -> Int    -- ^ The position to check in the example
-  -> Bool   -- ^ True iff the Condition is applicable in this context
+-- | Determines if the condition applies to the given example
+--   at the suggested location.
+applicable :: Condition -- ^ The condition to check against
+           -> [SoundGroup] -- ^ Map of SoundGroups to use
+           -> String -- ^ The example to check
+           -> Int -- ^ The position to check in the example
+           -> Bool -- ^ True iff the Condition is applicable in this context
 
 applicable Always _ _ _ = True
 

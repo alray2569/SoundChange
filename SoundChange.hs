@@ -27,9 +27,7 @@ import Condition
 import SoundGroup
 import Util (strip, replace)
 
-{- |
-  The representation of a sound change.
--}
+-- | The representation of a sound change.
 data SoundChange = SoundChange {
   initial :: String, -- ^ Returns the initial value, before the sound change
   final :: String, -- ^ Returns the final value, after the sound change
@@ -38,7 +36,7 @@ data SoundChange = SoundChange {
 
 instance Read SoundChange where
   readsPrec _ str
-    | hasCond str =
+    | hasCond =
       let [ini, fin, cond] = splitstr
       in [(SoundChange ini (if fin /= "{}" then fin else "") (read cond), "")]
     | otherwise =
@@ -46,16 +44,19 @@ instance Read SoundChange where
       in [(SoundChange ini fin Always, "")]
     where
       splitstr = map strip $ splitOneOf "/>" str :: [String]
-      hasCond = elem '/'  :: String -> Bool
+      hasCond = elem '/' str  :: Bool
 
-{- |
-  Applies the given SoundChange to the given String
--}
-applySoundChange ::
-  SoundChange -- ^ The sound change rule to apply
-  -> [SoundGroup] -- ^ Map of SoundGroups to use
-  -> String -- ^ String to apply sound change rule to
-  -> String -- ^ String with sound change applied to it
+instance Show SoundChange where
+  show sc
+    | hasCond = initial sc ++ " > " ++ final sc ++ " / " ++ show (when sc)
+    | otherwise = initial sc ++ " > " ++ final sc
+    where hasCond = when sc /= Always :: Bool
+
+-- | Applies the given SoundChange to the given String
+applySoundChange :: SoundChange -- ^ The sound change rule to apply
+                 -> [SoundGroup] -- ^ Map of SoundGroups to use
+                 -> String -- ^ String to apply sound change rule to
+                 -> String -- ^ String with sound change applied to it
 
 applySoundChange (SoundChange input output cond) sgs string =
   tail.init $ apply 0 modstr
@@ -69,6 +70,6 @@ applySoundChange (SoundChange input output cond) sgs string =
         applicable cond sgs (replace input "_" modstr) pos =
           output ++ apply (pos + len) (drop len str)
       | otherwise = recurse
-        where
-          len = length input :: Int
-          recurse = head str : apply (pos + 1) (tail str) :: String
+      where
+        len = length input :: Int
+        recurse = head str : apply (pos + 1) (tail str) :: String

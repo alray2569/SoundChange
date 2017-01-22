@@ -14,19 +14,17 @@ import Data.List (dropWhileEnd, isPrefixOf, isSubsequenceOf)
 import Data.List.Split (splitOn)
 import Data.Maybe (isNothing)
 
-{- |
-  Strips leading and trailing whitespace from the given String.
--}
+-- | Strips leading and trailing whitespace from the given String.
 strip :: String -- ^ Input String
       -> String -- ^ Output String, whitespace removed
-strip = dropWhileEnd isSpace.dropWhile isSpace -- remove spaces around
+strip = dropWhileEnd isSpace.dropWhile isSpace
 
 -- | Performs substitution on a string
 replace :: Eq a
-  => [a] -- ^ The search value
-  -> [a] -- ^ The replace value
-  -> [a] -- ^ The string to search in
-  -> [a] -- ^ The string, after substitutions
+        => [a] -- ^ The search value
+        -> [a] -- ^ The replace value
+        -> [a] -- ^ The string to search in
+        -> [a] -- ^ The string, after substitutions
 replace [] _ str = str
 replace _ _ [] = []
 replace find repl str
@@ -56,9 +54,9 @@ infixl 9 ?
 -- | Finds the second term referenced by the first given term
 infixl 9 ??
 (??) :: (Eq a)
-      => [(a, b, c)] -- ^ The list of three-tuples to search in
-      -> a -- ^ The first term to search for
-      -> Maybe b -- ^ Just the second term, or Nothing if no matches
+     => [(a, b, c)] -- ^ The list of three-tuples to search in
+     -> a -- ^ The first term to search for
+     -> Maybe b -- ^ Just the second term, or Nothing if no matches
 (??) list find
   | isNothing (list ? find) = Nothing
   | otherwise = Just $ (\(Just (b, _)) -> b) (list ? find)
