@@ -4,6 +4,8 @@ Description : Conditions and Situations and their environs
 Copyright   : (c) Andrew Ray, 2017
 License     : MIT
 
+Conditions and Situations and their environs
+
 Read syntax:
 
 @

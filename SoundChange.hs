@@ -4,6 +4,8 @@ Description : SoundChange datatype and environs
 Copyright   : (c) Andrew Ray, 2017
 License     : MIT
 
+SoundChange datatype and environs
+
 Read syntax:
 
 @

@@ -3,6 +3,8 @@ Module      : Main
 Description : Main module for Yasgheld
 Copyright   : (c) Andrew Ray, 2017
 License     : MIT
+
+Main module for Yasgheld
 -}
 module Main (main) where
 

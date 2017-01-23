@@ -4,6 +4,8 @@ Description : SoundGroup and environs
 Copyright   : (c) Andrew Ray, 2017
 License     : MIT
 
+SoundGroup and environs
+
 Read Syntax:
 
 @
