@@ -1,5 +1,10 @@
 {- |
-  Utility functions for Yasgheld.
+Module      : Util
+Description : Utility functions for Yasgheld
+Copyright   : (c) Andrew Ray, 2017
+License     : MIT
+
+Utility functions for Yasgheld.
 -}
 module Util (
   strip,

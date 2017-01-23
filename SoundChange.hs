@@ -1,16 +1,19 @@
 {- |
-  Module contains the information pertaining to SoundChanges.
+Module      : SoundChange
+Description : SoundChange datatype and environs
+Copyright   : (c) Andrew Ray, 2017
+License     : MIT
 
-  Read syntax:
+Read syntax:
 
-  @
-  in > out / condition
-  @
+@
+in > out / condition
+@
 
-  where @in@ is the input string, @out@ is the output string, @condition@
-  is the <Condition> of application. In the event that @out@ or @in@ is empty,
-  the symbol @{}@ may be used, as in @h > {} / V_@ to indicate loss of
-  syllable-final \/h\/.
+where @in@ is the input string, @out@ is the output string, @condition@
+is the <Condition> of application. In the event that @out@ or @in@ is empty,
+the symbol @{}@ may be used, as in @h > {} / V_@ to indicate loss of
+syllable-final \/h\/.
 -}
 module SoundChange (
   SoundChange,

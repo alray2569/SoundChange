@@ -1,4 +1,9 @@
--- | Main module for Yasgheld.
+{- |
+Module      : Main
+Description : Main module for Yasgheld
+Copyright   : (c) Andrew Ray, 2017
+License     : MIT
+-}
 module Main (main) where
 
 import System.Environment (getArgs)

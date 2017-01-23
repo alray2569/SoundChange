@@ -1,19 +1,22 @@
 {- |
-  Module contains information about SoundGroups.
+Module      : SoundGroup
+Description : SoundGroup and environs
+Copyright   : (c) Andrew Ray, 2017
+License     : MIT
 
-  Read Syntax:
+Read Syntax:
 
-  @
-  G: abcd
-  @
+@
+G: abcd
+@
 
-  where @G@ is the symbol to represent the group, and @abcd@ are the sounds
-  in the group. In the future, the alternative syntax:
-  @
-  GroupName: abcd
-  @
-  is expected to work, where GroupName is any multicharacter identifier for
-  the group.
+where @G@ is the symbol to represent the group, and @abcd@ are the sounds
+in the group. In the future, the alternative syntax:
+@
+GroupName: abcd
+@
+is expected to work, where GroupName is any multicharacter identifier for
+the group.
 -}
 module SoundGroup (
   SoundGroup,

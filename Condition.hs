@@ -1,18 +1,20 @@
 {- |
-  Module contains information relating to conditions and situations.
+Module      : Condition
+Description : Conditions and Situations and their environs
+Copyright   : (c) Andrew Ray, 2017
+License     : MIT
 
-  Read syntax:
+Read syntax:
 
-  @
-  [!]pre_post [& [!]pre_post [& [!]pre_post ...]]
-  @
+@
+[!]pre_post [& [!]pre_post [& [!]pre_post ...]]
+@
 
-  where @pre@ is the precondition and @post@ is the postcondition
-
-  @!@ is used for negation,
-  @&@ is used to combine conditions,
-  @#@ is used for beginning or end of word,
-  @_@ is used for search pattern characters
+where @pre@ is the precondition and @post@ is the postcondition
+@!@ is used for negation,
+@&@ is used to combine conditions,
+@#@ is used for beginning or end of word,
+@_@ is used for search pattern characters
 -}
 module Condition (
   Situation,
