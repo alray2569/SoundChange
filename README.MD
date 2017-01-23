@@ -107,9 +107,11 @@ See the [documentation](https://alray2569.github.io/SoundChange/index.html).
 If you want to contribute, just fork it. When your features are ready,
 make a pull request and I'll look at your code.
 
-If you are contributing, please use a code formatting style consistant with 
-existing code and document well using Haddock. Undocumented code will not 
-be accepted into the repository. Please document any external packages you
+If you are contributing, please use a code formatting style and naming 
+conventions consistant with existing code and document well using Haddock. 
+Undocumented code will not be accepted into the repository. Where 
+possible, your changed code should be in new files, though I understand 
+that this is not always possible. Please document any external packages you
 use in your source. Note that no source utilizing external packages will be
 accepted at this time, though they may be at a later date. Additionally, 
 all contributions must be [Safe Haskell](https://downloads.haskell.org/~ghc/7.8.2/docs/html/users_guide/safe-haskell.html).
