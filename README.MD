@@ -6,6 +6,8 @@ About
 The Yasgheld (/'y&aelig;z.g&#603;ld/) sound change applier
 is a project to create a sound-change applier to assist
 historical conlangers with consistent sound changes.
+Yasgheld is licensed under the MIT software license. See
+the enclosed LICENSE file for the full text of the license.
 
 Installation
 ------------
@@ -99,6 +101,14 @@ If you have files using the version 1 syntax, they will still
 work if they have the extension `.ygg1`, however, the extension
 must be included in the command line.
 
-API
+API and Contributing
 ---
 See the [documentation](https://alray2569.github.io/SoundChange/index.html).
+If you want to contribute, just fork it. When your features are ready,
+make a pull request and I'll look at your code.
+
+If you are contributing, please use a code formatting style consistant with 
+existing code and document well using Haddock. Undocumented code will not 
+be accepted into the repository. Please document any external packages you
+use in your source. Note that no source utilizing external packages will be
+accepted at this time, though they may be at a later date. Thanks!
