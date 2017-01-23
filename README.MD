@@ -111,4 +111,6 @@ If you are contributing, please use a code formatting style consistant with
 existing code and document well using Haddock. Undocumented code will not 
 be accepted into the repository. Please document any external packages you
 use in your source. Note that no source utilizing external packages will be
-accepted at this time, though they may be at a later date. Thanks!
+accepted at this time, though they may be at a later date. Additionally, 
+all contributions must be [Safe Haskell](https://downloads.haskell.org/~ghc/7.8.2/docs/html/users_guide/safe-haskell.html).
+Thank you for contributing!
