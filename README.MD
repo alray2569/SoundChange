@@ -81,7 +81,9 @@ Syntax of the sound group list
 ----
 Sound groups should be listed exactly one per line, and take one of
 the following forms:
+
 ``X: abcd``
+
 ``Group: abcd``
 
 where `X` is the one-character capital letter that identifies
