@@ -6,6 +6,8 @@ About
 The Yasgheld (/'y&aelig;z.g&#603;ld/) sound change applier
 is a project to create a sound-change applier to assist
 historical conlangers with consistent sound changes.
+Yasgheld is licensed under the MIT software license. See
+the enclosed LICENSE file for the full text of the license.
 
 Installation
 ------------
