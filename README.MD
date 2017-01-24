@@ -118,3 +118,8 @@ use in your source. Note that no source utilizing external packages will be
 accepted at this time, though they may be at a later date. Additionally, 
 all contributions must be [Safe Haskell](https://downloads.haskell.org/~ghc/7.8.2/docs/html/users_guide/safe-haskell.html).
 Thank you for contributing!
+
+If you would like to extend Yasgheld without contributing, you are free to
+do so, and even to host and distribute your own version of Yasgheld,
+under the provision that it is licensed under the MIT license. I also ask
+that you include a reference to this repository. 
