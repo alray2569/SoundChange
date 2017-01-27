@@ -3,3 +3,9 @@ test/*
 *.exe
 *.o
 *.hi
+*.bat
+Tester/*
+dist/*
+*.cabal
+Setup.hs
+ChangeLog.md

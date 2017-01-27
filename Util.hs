@@ -10,6 +10,7 @@ module Util (
   strip,
   replace,
   removeComment,
+  dropBlanks,
   (??),
   (?)
 ) where
@@ -33,17 +34,18 @@ replace :: Eq a
 replace [] _ str = str
 replace _ _ [] = []
 replace find repl str
-  | find `isPrefixOf` str =
-    repl ++ replace find repl (drop (length find) str)
-  | otherwise =
-    head str : replace find repl (tail str)
+  | find `isPrefixOf` str = repl ++ replace find repl (drop (length find) str)
+  | otherwise = head str : replace find repl (tail str)
 
 -- | Removes comments from strings
 removeComment :: String -- ^ String to remove comments from
               -> String -- ^ String with comments removed
 removeComment str
   | ";" `isSubsequenceOf` str = head $ splitOn ";" str
-  | otherwise      = str
+  | otherwise                 = str
+
+dropBlanks :: [String] -> [String]
+dropBlanks = filter (\a -> strip a /= "" && not (";" `isPrefixOf` strip a))
 
 -- | Finds the list referenced by the given first term
 infixl 9 ?

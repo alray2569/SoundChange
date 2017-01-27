@@ -14,7 +14,7 @@ import Data.List (isSubsequenceOf)
 
 import SoundChange
 import SoundGroup
-import Util (replace, removeComment)
+import Util (replace, removeComment, dropBlanks)
 
 {- |
   IO Handler for the game
@@ -29,22 +29,23 @@ main =
      ; let soundgroups =
             if ".ygg1" `isSubsequenceOf` sgfile
               then
-                map ((\(a,b) -> (a,b, Nothing)).read.removeComment)
-                    (lines sgfcontent)
+                map ((\(a,b) -> (a,b, Nothing)).read.removeComment) $
+                  dropBlanks $ lines sgfcontent
               else
-                zipWith parseSoundGroup [1..] (lines sgfcontent)
+                zipWith parseSoundGroup [1..] $ dropBlanks $ lines sgfcontent
 
      -- Read the sound change file
      ; soundchangefile <- openFile (fileExt scfile ".ygc") ReadMode
      ; scfcontent <- hGetContents soundchangefile
      ; let soundchanges =
-            map (read.removeComment)
-                (lines $ subGroups soundgroups scfcontent)
+            map (read.removeComment) $ -- remove comments and read
+              dropBlanks $ -- remove blank lines
+                lines $ subGroups soundgroups scfcontent
 
      -- Read the word list file
      ; wordlistinfile <- openFile (fileExt infile ".ygw") ReadMode
      ; wlifcontent <- hGetContents wordlistinfile
-     ; let wordlistin = map removeComment $ lines wlifcontent
+     ; let wordlistin = map removeComment $ dropBlanks $ lines wlifcontent
 
      -- Write the output file
      ; let wordlistout = applyAllToAll soundchanges soundgroups wordlistin

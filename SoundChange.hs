@@ -43,13 +43,17 @@ instance Read SoundChange where
   readsPrec _ str
     | hasCond =
       let [ini, fin, cond] = splitstr
-      in [(SoundChange ini (if fin /= "{}" then fin else "") (read cond), "")]
+      in [(SoundChange ini
+            (if fin /= "{}"
+                then fin
+                else "")
+            (read cond), "")]
     | otherwise =
       let [ini, fin] = splitstr
       in [(SoundChange ini fin Always, "")]
     where
       splitstr = map strip $ splitOneOf "/>" str :: [String]
-      hasCond = elem '/' str  :: Bool
+      hasCond = elem '/' str :: Bool
 
 instance Show SoundChange where
   show sc
@@ -71,10 +75,9 @@ applySoundChange (SoundChange input output cond) sgs string =
     apply :: Int -> String -> String
     apply _ "" = ""
     apply pos str
-      | and (zipWith (matches sgs) input (take len str)) &&
-        applicable cond sgs (replace input "_" modstr) pos =
-          output ++ apply (pos + len) (drop len str)
-      | otherwise = recurse
+      | allMatch && allApply = output ++ apply (pos + len) (drop len str)
+      | otherwise = head str : apply (pos + 1) (tail str)
       where
         len = length input :: Int
-        recurse = head str : apply (pos + 1) (tail str) :: String
+        allMatch = and (zipWith (matches sgs) input (take len str)) :: Bool
+        allApply = applicable cond sgs (replace input "_" modstr) pos :: Bool
