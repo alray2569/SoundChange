@@ -1,3 +1,5 @@
+{-# LANGUAGE Safe #-}
+
 {- |
 Module      : SoundChange
 Description : SoundChange datatype and environs
@@ -11,6 +13,27 @@ Read syntax:
 @
 in > out / condition
 @
+(Sound in changes to out when condition is true)
+
+@
+'\@ n / condition
+@
+(Stress moves to nth syllable when condition is true)
+
+@
+'\@ -n / condition
+@
+(Stress moves to nth syllable from end when condition is true)
+
+@
+'> n / condition
+@
+(Stress moves n syllables towards end when condition is true)
+
+@
+'> -n / condition
+@
+(Stress moves n syllables towards front when condition is true)
 
 where @in@ is the input string, @out@ is the output string, @condition@
 is the <Condition> of application. In the event that @out@ or @in@ is empty,
@@ -18,7 +41,7 @@ the symbol @{}@ may be used, as in @h > {} / V_@ to indicate loss of
 syllable-final \/h\/.
 -}
 module SoundChange (
-  SoundChange,
+  SoundChange(SoundChange, StressMove, StressShift),
   applySoundChange,
   initial,
   final,
@@ -33,13 +56,46 @@ import SoundGroup
 import Util (strip, replace)
 
 -- | The representation of a sound change.
-data SoundChange = SoundChange {
-  initial :: String, -- ^ Returns the initial value, before the sound change
-  final :: String, -- ^ Returns the final value, after the sound change
-  when :: Condition -- ^ Returns the condition under which the rule applies
-}
+data SoundChange =
+  SoundChange {
+    initial :: String, -- ^ Returns the initial value, before the sound change
+    final :: String, -- ^ Returns the final value, after the sound change
+    when :: Condition -- ^ Returns the condition under which the rule applies
+  } |
+  StressMove {
+    moveTo :: Int, -- ^ The syllable to move stress to,
+    when :: Condition -- ^ Condition under which the rule applies
+  } |
+  StressShift {
+    move :: Int, -- ^ The amount to move the stress by
+    when :: Condition
+  }
+  deriving (Eq)
 
 instance Read SoundChange where
+  -- StressShift rule
+  readsPrec _ ('\'' : '>' : rest)
+    | hasCond =
+      let [amt, cond] = splitstr
+      in [(StressShift (read amt) (read cond), "")]
+    | otherwise =
+      [(StressShift (read $ strip rest) Always, "")]
+    where
+      splitstr = map strip $ splitOneOf "/>" rest :: [String]
+      hasCond = elem '/' rest :: Bool
+
+  -- StressMove rule
+  readsPrec _ ('\'' : '@' : rest)
+    | hasCond =
+      let [num, cond] = splitstr
+      in [(StressMove (read $ strip num) (read cond), "")]
+    | otherwise =
+      [(StressMove (read $ strip rest) Always, "")]
+    where
+      splitstr = map strip $ splitOneOf "/>" rest :: [String]
+      hasCond = elem '/' rest :: Bool
+
+  -- SoundChange rule
   readsPrec _ str
     | hasCond =
       let [ini, fin, cond] = splitstr

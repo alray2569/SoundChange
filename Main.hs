@@ -1,3 +1,5 @@
+{-# LANGUAGE Safe #-}
+
 {- |
 Module      : Main
 Description : Main module for Yasgheld
@@ -12,6 +14,8 @@ import System.Environment (getArgs)
 import System.IO
 import Data.List (isSubsequenceOf)
 
+import Data.Aviary.Birds
+
 import SoundChange
 import SoundGroup
 import Util (replace, removeComment, dropBlanks)
@@ -25,7 +29,7 @@ main =
 
      -- Read the sound group file
      ; soundgroupfile <- openFile (fileExt sgfile ".ygg") ReadMode
-     ; sgfcontent <- hGetContents soundgroupfile;
+     ; sgfcontent <- hGetContents soundgroupfile
      ; let soundgroups =
             if ".ygg1" `isSubsequenceOf` sgfile
               then

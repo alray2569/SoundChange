@@ -1,3 +1,5 @@
+{-# LANGUAGE Safe #-}
+
 {- |
 Module      : Util
 Description : Utility functions for Yasgheld

@@ -1,3 +1,5 @@
+{-# LANGUAGE Safe #-}
+
 {- |
 Module      : Condition
 Description : Conditions and Situations and their environs

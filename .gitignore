@@ -9,3 +9,5 @@ dist/*
 *.cabal
 Setup.hs
 ChangeLog.md
+*.local
+dist-*/*

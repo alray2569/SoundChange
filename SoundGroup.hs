@@ -1,3 +1,5 @@
+{-# LANGUAGE Safe #-}
+
 {- |
 Module      : SoundGroup
 Description : SoundGroup and environs
