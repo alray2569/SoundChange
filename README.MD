@@ -11,11 +11,21 @@ the enclosed LICENSE file for the full text of the license.
 
 Installation
 ------------
-At present, you will need to compile Yasgheld on your own;
-no binaries are provided. In order to compile Yasgheld,
-download the source code and run `ghc -o yasgheld[.exe] Main.hs`
-(or some other Haskell compiler). You will need an
-installation of Haskell to complete this step.
+To use a release version on Windows, simply click on
+"releases" above and download the executable file. If
+you wish, you may also download the source and compile
+it yourself (see instructions below).
+
+To get the most recent version of Yasgheld, or to use
+Yasgheld on a computer running Linux or MacOS,
+you will need to compile Yasgheld on your own. In order 
+to compile Yasgheld, download the source code and run 
+`ghc -o yasgheld[.exe] Main.hs` (or some other Haskell 
+compiler). You will need an installation of Haskell to 
+complete this step.
+
+Note that no versions of Yasgheld are guaranteed stable,
+though the most recent release is most likely to be.
 
 Usage
 -----
@@ -24,7 +34,7 @@ are the paths of the input word list, the list of sound
 changes, the list of sound groups, and the destination
 file. These arguments are passed in this order.
 
-``yasgheld input.ygw changes.ygc groups.ygg1 output.ygw``
+``yasgheld input.ygw changes.ygc groups.ygg output.ygw``
 
 Syntax of the word list
 ------
@@ -101,7 +111,8 @@ The author recommends using the extension `.ygg`
 you will not need to enter it into the command line argument.
 If you have files using the version 1 syntax, they will still
 work if they have the extension `.ygg1`, however, the extension
-must be included in the command line.
+must be included in the command line, and the newer file format
+is _not_ backwards compatible.
 
 API and Contributing
 ---
@@ -111,12 +122,14 @@ make a pull request and I'll look at your code.
 
 If you are contributing, please use a code formatting style and naming 
 conventions consistant with existing code and document well using Haddock. 
-Undocumented code will not be accepted into the repository. Where 
+Undocumented code will _not_ be accepted into the repository. Where 
 possible, your changed code should be in new files, though I understand 
 that this is not always possible. Please document any external packages you
-use in your source. Note that no source utilizing external packages will be
-accepted at this time, though they may be at a later date. Additionally, 
-all contributions must be [Safe Haskell](https://downloads.haskell.org/~ghc/7.8.2/docs/html/users_guide/safe-haskell.html).
+use in your source. Note that no source utilizing external packages other than
+QuickCheck and HUnit will be accepted at this time, though they may be at a 
+later date. Additionally, all contributions must be 
+[Safe Haskell](https://downloads.haskell.org/~ghc/7.8.2/docs/html/users_guide/safe-haskell.html)
+and must be tested thoroughly using either HUnit or QuickCheck.
 Thank you for contributing!
 
 If you would like to extend Yasgheld without contributing, you are free to
